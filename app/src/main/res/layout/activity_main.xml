@@ -13,10 +13,10 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/photo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerInParent="true"
-        android:src="@mipmap/ic_launcher"/>
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/circle"/>
 
     <Button
         android:id="@+id/takePic"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/photo"
         android:text="打开相机"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"/>
     <Button
         android:id="@+id/takeGallery"
