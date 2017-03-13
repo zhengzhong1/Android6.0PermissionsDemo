@@ -1,0 +1,3 @@
+# Android6.0PermissionsDemo
+Android拍照、相册访问图片剪裁适配到Android7.0，针对Android7.0访问file://Uri的FileUriExposedException异常，
+通过FileProvider获取共享Uri解决Android7.0中调用系统相机拍照的问题
