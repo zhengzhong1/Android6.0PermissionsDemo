@@ -14,7 +14,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
 /**
- * Created by:zheng zhong on 2016/8/6 16:16
+ * @author zhengzhong on 2016/8/6 16:16
  * Email zheng_zhong@163.com
  */
 public class PhotoUtils {
@@ -29,7 +29,8 @@ public class PhotoUtils {
         //调用系统相机
         Intent intentCamera = new Intent();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intentCamera.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //添加这一句表示对目标应用临时授权该Uri所代表的文件
+            //添加这一句表示对目标应用临时授权该Uri所代表的文件
+            intentCamera.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
         intentCamera.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
         //将拍照结果保存至photo_file的Uri中，不保留在相册中

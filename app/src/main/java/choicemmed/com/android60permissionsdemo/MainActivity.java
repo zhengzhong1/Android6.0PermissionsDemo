@@ -24,6 +24,10 @@ import java.io.File;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * @author zhengzhong on 2016/8/6 16:16
+ * Email zheng_zhong@163.com
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
     @ViewInject(R.id.photo)
@@ -60,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.takeGallery:
                 autoObtainStoragePermission();
                 break;
+            default:
         }
     }
 
@@ -78,8 +83,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {//有权限直接调用系统相机拍照
             if (hasSdcard()) {
                 imageUri = Uri.fromFile(fileUri);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-                    imageUri = FileProvider.getUriForFile(MainActivity.this, "com.zz.fileprovider", fileUri);//通过FileProvider创建一个content类型的Uri
+                //通过FileProvider创建一个content类型的Uri
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    imageUri = FileProvider.getUriForFile(MainActivity.this, "com.zz.fileprovider", fileUri);
+                }
                 PhotoUtils.takePicture(this, imageUri, CODE_CAMERA_REQUEST);
             } else {
                 ToastUtils.showShort(this, "设备没有SD卡！");
@@ -92,7 +99,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         switch (requestCode) {
-            case CAMERA_PERMISSIONS_REQUEST_CODE: {//调用系统相机申请拍照权限回调
+            //调用系统相机申请拍照权限回调
+            case CAMERA_PERMISSIONS_REQUEST_CODE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (hasSdcard()) {
                         imageUri = Uri.fromFile(fileUri);
@@ -110,7 +118,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
             }
-            case STORAGE_PERMISSIONS_REQUEST_CODE://调用系统相册申请Sdcard权限回调
+            //调用系统相册申请Sdcard权限回调
+            case STORAGE_PERMISSIONS_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     PhotoUtils.openPic(this, CODE_GALLERY_REQUEST);
                 } else {
@@ -118,11 +127,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     ToastUtils.showShort(this, "请允许打操作SDCard！！");
                 }
                 break;
+            default:
         }
     }
 
-    private static final int output_X = 480;
-    private static final int output_Y = 480;
+    private static final int OUTPUT_X = 480;
+    private static final int OUTPUT_Y = 480;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -130,17 +140,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
-                case CODE_CAMERA_REQUEST://拍照完成回调
+                //拍照完成回调
+                case CODE_CAMERA_REQUEST:
                     cropImageUri = Uri.fromFile(fileCropUri);
-                    PhotoUtils.cropImageUri(this, imageUri, cropImageUri, 1, 1, output_X, output_Y, CODE_RESULT_REQUEST);
+                    PhotoUtils.cropImageUri(this, imageUri, cropImageUri, 1, 1, OUTPUT_X, OUTPUT_Y, CODE_RESULT_REQUEST);
                     break;
-                case CODE_GALLERY_REQUEST://访问相册完成回调
+                //访问相册完成回调
+                case CODE_GALLERY_REQUEST:
                     if (hasSdcard()) {
                         cropImageUri = Uri.fromFile(fileCropUri);
                         Uri newUri = Uri.parse(PhotoUtils.getPath(this, data.getData()));
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             newUri = FileProvider.getUriForFile(this, "com.zz.fileprovider", new File(newUri.getPath()));
-                        PhotoUtils.cropImageUri(this, newUri, cropImageUri, 1, 1, output_X, output_Y, CODE_RESULT_REQUEST);
+                        }
+                        PhotoUtils.cropImageUri(this, newUri, cropImageUri, 1, 1, OUTPUT_X, OUTPUT_Y, CODE_RESULT_REQUEST);
                     } else {
                         ToastUtils.showShort(this, "设备没有SD卡！");
                     }
@@ -151,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         showImages(bitmap);
                     }
                     break;
+                default:
             }
         }
     }
