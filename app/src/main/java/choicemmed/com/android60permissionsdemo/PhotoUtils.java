@@ -28,10 +28,6 @@ public class PhotoUtils {
     public static void takePicture(Activity activity, Uri imageUri, int requestCode) {
         //调用系统相机
         Intent intentCamera = new Intent();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            //添加这一句表示对目标应用临时授权该Uri所代表的文件
-            intentCamera.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        }
         intentCamera.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
         //将拍照结果保存至photo_file的Uri中，不保留在相册中
         intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
@@ -64,6 +60,7 @@ public class PhotoUtils {
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
         intent.setDataAndType(orgUri, "image/*");
+        //发送裁剪信号
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", aspectX);
         intent.putExtra("aspectY", aspectY);
@@ -72,6 +69,8 @@ public class PhotoUtils {
         intent.putExtra("scale", true);
         //将剪切的图片保存到目标Uri中
         intent.putExtra(MediaStore.EXTRA_OUTPUT, desUri);
+        //1-false用uri返回图片
+        //2-true直接用bitmap返回图片（此种只适用于小图片，返回图片过大会报错）
         intent.putExtra("return-data", false);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         intent.putExtra("noFaceDetection", true);
